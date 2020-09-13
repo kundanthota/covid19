@@ -231,16 +231,16 @@ app.layout = html.Div([
     )),
     html.Div([
 
-        html.Div(dcc.Graph(id = 'infections'), style = {'width' :'40%','height':'600px', 'float': 'left', }),
-        html.Div(dcc.Graph(id = 'daily_infections'), style = {'width' :'40%', 'height':'600px', 'float': 'right',})
+        html.Div(dcc.Graph(id = 'infections'), style = {'width' :'48%','height':'600px', 'float': 'left', }),
+        html.Div(dcc.Graph(id = 'daily_infections'), style = {'width' :'48%', 'height':'600px', 'float': 'right',})
     ]),
     html.Div([
-        html.Div(dcc.Graph(id ='recoveries'), style = {'width' :'40%','height':'600px', 'float': 'left', }),
-        html.Div(dcc.Graph(id = 'daily_recoveries'), style = {'width' :'40%', 'height':'600px', 'float': 'right', })
+        html.Div(dcc.Graph(id ='recoveries'), style = {'width' :'48%','height':'600px', 'float': 'left', }),
+        html.Div(dcc.Graph(id = 'daily_recoveries'), style = {'width' :'48%', 'height':'600px', 'float': 'right', })
     ]),
     html.Div([
-        html.Div(dcc.Graph(id = 'deaths'), style = {'width' :'40%','height':'600px', 'float': 'left', }),
-        html.Div(dcc.Graph(id = 'daily_deaths'), style = {'width' :'40%', 'height':'600px', 'float': 'right', })
+        html.Div(dcc.Graph(id = 'deaths'), style = {'width' :'48%','height':'600px', 'float': 'left', }),
+        html.Div(dcc.Graph(id = 'daily_deaths'), style = {'width' :'48%', 'height':'600px', 'float': 'right', })
     ]),
 
     html.Div([
@@ -282,7 +282,7 @@ app.layout = html.Div([
     
     
 
-    ], style = {'margin': '0 auto', 'width' : '90%'})
+    ], style = {'margin': '0 auto', 'width' : '100%'})
 
 ])
 
@@ -345,15 +345,19 @@ def return_figures(country) :
     deaths.update_traces(line = dict(color='red'))
 
     day_wise_confirmed = px.bar(x = dates ,y = day_wise_infections[f'{country}'] , labels = { "x" : "Date", "y" : "Infections"}, height = 600)
-    day_wise_confirmed.update_layout(title_text = " Daily Infections" ,title_x=0.5, hovermode='x unified')
+    day_wise_confirmed.add_trace(go.Scatter(x = dates ,y = day_wise_infections[f'{country}'], mode = 'lines',hoverinfo = 'skip'))
+    day_wise_confirmed.update_layout(title_text = " Daily Infections" ,title_x=0.5, hovermode='x unified', showlegend = False)
     day_wise_confirmed.update_traces(marker_color = '#999900')
+
   
     day_wise_recovered = px.bar(x = dates ,y = day_wise_recoveries[f'{country}'] , labels = { "x" : "Date", "y" : "Recoveries"}, height = 600)
-    day_wise_recovered.update_layout(title_text = " Daily Recoveries" ,title_x=0.5, hovermode='x unified' )
+    day_wise_recovered.add_trace(go.Scatter(x = dates, y =  day_wise_recoveries[f'{country}'], mode = 'lines', hoverinfo = 'skip'))
+    day_wise_recovered.update_layout(title_text = " Daily Recoveries" ,title_x=0.5, hovermode='x unified', showlegend = False )
     day_wise_recovered.update_traces(marker_color = 'green')
 
     day_wise_death_cases = px.bar(x = dates ,y = day_wise_deaths[f'{country}'] , labels = { "x" : "Date", "y" : "Deaths"}, height = 600)
-    day_wise_death_cases.update_layout(title_text = " Daily Deaths" ,title_x=0.5, hovermode='x unified')
+    day_wise_death_cases.add_trace(go.Scatter(x = dates, y =  day_wise_deaths[f'{country}'], mode = 'lines', hoverinfo = 'skip'))
+    day_wise_death_cases.update_layout(title_text = " Daily Deaths" ,title_x=0.5, hovermode='x unified', showlegend = False)
     day_wise_death_cases.update_traces(marker_color = 'red')
 
     return confirmed, day_wise_confirmed, recovered, day_wise_recovered, deaths, day_wise_death_cases
@@ -375,7 +379,8 @@ def sir_figure(country):
                         name='Gamma'))
     parameters_figure.update_layout(height = 800,  xaxis_title="Week",
     yaxis_title="parameters",  hovermode='x unified', title = 'Parameters change w.r.t Time', title_x = 0.5 )
-    return sir,parameters_figure
+
+    return sir, parameters_figure
 
 @app.callback(
     Output('comparision_output','figure'),
