@@ -2,6 +2,6 @@ numpy==1.19.0
 pandas==1.0.5
 plotly==4.8.2
 dash==1.13.4
-requests==2.24.0
+requests==2.31.0
 scipy == 1.5.0
 gunicorn
